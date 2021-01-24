@@ -224,6 +224,12 @@ io.on('connection', async (socket) => {
     await setLocked(documentId, false)
   })
 
+  // send client count
+  io.sockets.emit('getCount', io.sockets.adapter.rooms.get(documentId).size)
+  socket.on('disconnect', () => {
+    io.sockets.emit('getCount', io.sockets.adapter.rooms.get(documentId) === undefined ? 0 : io.sockets.adapter.rooms.get(documentId).size)
+  })
+
 })
 
 

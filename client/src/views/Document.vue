@@ -84,21 +84,13 @@ export default {
     // this.socket
 		// get the current document and its version
     .on('init', data => this.onInit(data))
+    // send all updates to the collaboration extension
     .on('update', data => {
       console.log('update', data)
       this.editor.extensions.options.collaboration.update(data)
     })
-      // get count of connected users
-      // .on('getCount', count => this.setCount(count))
-		// // send all updates to the collaboration extension
-		// .on('update', data => this.editor.extensions.options.collaboration.update(data))
-		// // get count of connected users
-		// .on('getCount', count => this.setCount(count))
-
-
-		// this.socket.on('connect', () => {
-		// 	this.socket.emit('test', documentId)
-		// })
+    // get count of connected users
+    .on('getCount', count => this.setCount(count))
 	},
 
 	beforeDestroy() {
