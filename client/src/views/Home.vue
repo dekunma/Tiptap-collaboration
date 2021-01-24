@@ -21,7 +21,7 @@ export default {
   },
   computed: {
     buttonText() {
-      return this.loading ? 'Creating...' : 'New Document';
+      return this.loading ? 'Creating ...' : 'New Document';
     },
   },
   methods: {
@@ -29,7 +29,7 @@ export default {
       this.loading = true
       axios.get('http://localhost:5000/new')
       .then(r => {
-        window.location.href = `/document/${r.data}`
+        window.location.href = `/document/?id=${r.data}`
       })
       .catch(e => {
         console.log(e)
