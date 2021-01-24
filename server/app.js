@@ -152,24 +152,12 @@ async function getSteps(documentId, version) {
 }
 
 io.on('connection', async (socket) => {
-  // console.log(socket.handshake.query)
-  // socket.on('update', async ({}))
-
-
   const documentId = socket.request._query.id;
-  socket.on('test', r => {
-    console.log(r)
-    // socket.emit('test', 'test')
-  })
 
-  // socket.on('id', async (id) => {
-  //   documentId = id
-  //   const data = await getDoc(id);
-  //   socket.emit('init', data)
-  // })
+  socket.join(documentId)
 
   const data = await getDoc(documentId);
-  socket.emit('init', data)
+  io.to(documentId).emit('init', data)
 
   socket.on('update', async ({ version, clientID, steps }) => {
     console.log('update, documentId: ', documentId)
@@ -193,7 +181,8 @@ io.on('connection', async (socket) => {
         version,
         steps: await getSteps(documentId, version),
       }
-      socket.emit('update', newData)
+      // socket.emit('update', newData)
+      io.to(documentId).emit('update', newData);
       console.log('s,', newData)
       await setLocked(documentId, false);
       return;
@@ -228,7 +217,7 @@ io.on('connection', async (socket) => {
     }
 
     // send update to everyone (me and others)
-    io.sockets.emit('update', dataToEmit)
+    io.to(documentId).emit('update', dataToEmit)
 
     console.log('d, ', dataToEmit)
 
