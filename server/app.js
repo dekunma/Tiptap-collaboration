@@ -12,9 +12,7 @@ require('dotenv').config();
 const app = express();
 
 // enable cors
-app.use(cors({
-  origin: `${process.env.CLIENT}`
-}))
+app.use(cors())
 
 // create http server
 const server = http.createServer(app);

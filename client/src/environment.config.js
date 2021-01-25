@@ -2,6 +2,6 @@
 // So that I handled configurations this way
 
 export default {
-    SERVER_ADDRESS: 'http://127.0.0.1',
+    SERVER_ADDRESS: 'http://localhost:5000',
     SERVER_PORT: 5000
 }
