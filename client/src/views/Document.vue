@@ -96,22 +96,6 @@
 
             <button
               class="menubar-button"
-              :class="{ 'is-active': isActive.bullet_list() }"
-              @click="commands.bullet_list"
-            >
-              <icon name="ul" />
-            </button>
-
-            <button
-              class="menubar-button"
-              :class="{ 'is-active': isActive.ordered_list() }"
-              @click="commands.ordered_list"
-            >
-              <icon name="ol" />
-            </button>
-
-            <button
-              class="menubar-button"
               @click="commands.undo"
             >
               <icon name="undo" />
@@ -147,8 +131,6 @@ import {
   OrderedList,
   BulletList,
   ListItem,
-  TodoItem,
-  TodoList,
   Bold,
   Code,
   Italic,
@@ -192,8 +174,6 @@ export default {
           new Heading({ levels: [1, 2, 3] }),
           new ListItem(),
           new OrderedList(),
-          new TodoItem(),
-          new TodoList(),
           new Link(),
           new Bold(),
           new Code(),
