@@ -1,20 +1,12 @@
 const http = require('http');
 const express = require('express');
-const Redis = require("ioredis");
 const cors = require('cors')
-const randomUUID = require('uuid-random');
-const { resolve } = require('path');
 const schema = require('./schema.js');
 const { Step } = require('prosemirror-transform');
 
 
 // config .env variabled
 require('dotenv').config();
-
-const redis = new Redis({
-  port: process.env.redisPort,
-  host: process.env.redisEndpoint,
-});
 
 // create express server
 const app = express();
@@ -25,133 +17,31 @@ app.use(cors())
 // create http server
 const server = http.createServer(app);
 
-// create redis client
-redis.on('connect', () => console.log('Connected to Redis'))
-
 // create socket.io server
 const io = require('socket.io')(server, {
+  // we need to enable cors for socket.io individually
   cors: {
     origin: '*',
   }
 });
 
+// controllers
+const newDocumentController = require('./controllers/newDocument')
+
 // create new collaboration document
-app.get('/new', (req, res, next) => {
-    const newCollaborationId = randomUUID();
+app.use('/new', newDocumentController)
 
-    let newDocumentData = {
-      version: 1,
-      doc: {
-        type: 'doc',
-        content: [
-          {
-            type: "heading",
-            content: [
-              {
-                "type": "text",
-                "text": "Welcome to collaboration documents! 👏"
-              },
-            ]
-          },
-          {
-            type: "heading",
-            content: [
-              {
-                "type": "text",
-                "text": "Start by typing or editing something"
-              },
-            ]
-          },
-        ]
-      }
-    }
+// import utils for document
+const { 
+  setSteps,
+  getDoc,
+  setDoc,
+  setLocked,
+  getLocked,
+  getSteps
+ } = require('./utils/documentUtils')
 
-    let newStepsDataJson = JSON.stringify([])
-    let newDocumentDataJson = JSON.stringify(newDocumentData);
-
-    redis.hset(`data.${newCollaborationId}`, 'data', newDocumentDataJson)
-    .then(() => {
-      redis.hset(`steps.${newCollaborationId}`, 'data', newStepsDataJson)
-    })
-    .then(() => res.send(newCollaborationId))
-    .catch(e => res.status(500).send(e))
-})
-
-const masxStoredSteps = 1000;
-
-// set the steps data of a file
-async function setSteps(documentId, {steps, version}) {
-  const oldDataString = await redis.hget(`steps.${documentId}`, 'data');
-
-  const oldData = oldDataString == null ? [] : JSON.parse(oldDataString);
-  const limitedOldData = oldData.slice(Math.max(oldData.length - masxStoredSteps));
-
-  const newData = [
-    ...limitedOldData,
-    ...steps.map((step, index) => {
-      return {
-        step: JSON.parse(JSON.stringify(step)),
-        version: version + index + 1,
-        clientID: step.clientID
-      }
-    })
-  ]
-
-  await redis.hset(`steps.${documentId}`, 'data', JSON.stringify(newData));
-  resolve()
-}
-
-async function getDoc(documentId) {
-  return new Promise((resolve, reject) => {
-    redis.hget(`data.${documentId}`, 'data')
-    .then(dataString => {
-      if (dataString === '') resolve(null);
-      else resolve(JSON.parse(dataString));
-    })
-    .catch(err => reject(err))
-  })
-}
-
-async function setDoc(documentId, newData) {
-  return new Promise(async (resolve, reject) => {
-    await redis.hset(`data.${documentId}`, 'data', JSON.stringify(newData));
-    resolve()
-  })
-}
-
-// set the lock state of a file
-async function setLocked(documentId, locked) {
-  return new Promise(async (resolve, reject) => {
-    let documentData = await getDoc(documentId);
-    documentData.isLocked = locked;
-    resolve()
-  })
-}
-
-// get the lock state of a file
-async function getLocked(documentId) {
-  return new Promise(async (resolve, reject) => {
-    const documentData = await getDoc(documentId);
-    if(documentData == null) resolve(null);
-    else resolve(documentData.isLocked);
-  })
-}
-
-// get the steps data of a file
-async function getSteps(documentId, version) {
-  return new Promise(async (resolve, reject) => {
-    const stepsString = await redis.hget(`steps.${documentId}`, 'data');
-    if (stepsString === '') resolve(null)
-    try {
-      const steps = JSON.parse(stepsString);
-      resolve(steps.filter(step => step.version > version))
-    }
-    catch(e) {
-      resolve([])
-    }
-  })
-}
-
+ // socket io
 io.on('connection', async (socket) => {
   const documentId = socket.request._query.id;
 
@@ -203,10 +93,7 @@ io.on('connection', async (socket) => {
     // calculating a new version number is easy
     const newVersion = version + newSteps.length
 
-
     // store data
-
-
     await setSteps(documentId, {version, steps:newSteps})
     await setDoc(documentId, { version: newVersion, doc })
 
@@ -227,8 +114,6 @@ io.on('connection', async (socket) => {
   })
 
 })
-
-
 
 // start server
 const PORT = process.env.PORT || 5000;
