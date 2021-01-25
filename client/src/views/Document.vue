@@ -45,22 +45,6 @@
                 <icon name="italic" />
               </button>
 
-              <!-- <button
-                class="menubar-button"
-                :class="{ 'is-active': isActive.strike() }"
-                @click="commands.strike"
-              >
-                <icon name="strike" />
-              </button>
-
-              <button
-                class="menubar-button"
-                :class="{ 'is-active': isActive.underline() }"
-                @click="commands.underline"
-              >
-                <icon name="underline" />
-              </button> -->
-
               <button
                 class="menubar-button"
                 :class="{ 'is-active': isActive.code() }"
@@ -141,9 +125,7 @@
           </editor-menu-bar>
 
           <div class='editor-content-wrapper'>
-            <!-- <div class='editor-content-inner-wrapper'> -->
-              <editor-content :editor="editor" class='editor-content'/>
-            <!-- </div> -->
+            <editor-content :editor="editor" class='editor-content'/>
           </div>
         </div>
       </div>
@@ -154,7 +136,8 @@
 <script>
 import io from 'socket.io-client';
 import { Editor, EditorContent, EditorMenuBar } from 'tiptap';
-import Icon from '@/components/Icon.vue'
+import Icon from '@/components/Icon.vue';
+import environmentConfig from '@/environment.config.js'
 import {
   CodeBlock,
   HardBreak,
@@ -168,8 +151,6 @@ import {
   Code,
   Italic,
   Link,
-  // Strike,
-  // Underline,
   History,
   Collaboration
 } from 'tiptap-extensions';
@@ -188,7 +169,7 @@ export default {
       editor: null,
       count: 1,
       indicator: <a-icon type="loading" class='document-connecting-text-spin' spin />,
-      notFound: false
+      notFound: false,
     }
 	},
 
@@ -215,8 +196,6 @@ export default {
           new Bold(),
           new Code(),
           new Italic(),
-          // new Strike(),
-          // new Underline(),
           new History(),
           new Collaboration({
             // the initial version we start with
@@ -239,9 +218,10 @@ export default {
 	},
 
 	mounted() {
+
     const documentId = this.$route.query.id;
     this.documentId = documentId;
-    this.socket = io('http://127.0.0.1:5000', { query: `id=${documentId}` })
+    this.socket = io(`${environmentConfig.SERVER_ADDRESS}:${environmentConfig.SERVER_PORT}`, { query: `id=${documentId}` })
 
 		// get the current document and its version
     .on('init', data => {
@@ -270,7 +250,7 @@ export default {
 
 .document {
   &-wrapper {
-    margin: 0 15vw;
+    margin: 0 12vw;
     margin-top: 5vh;
   }
 
@@ -385,7 +365,7 @@ export default {
       width: 100%;
       will-change: transform;
       transition: box-shadow @animate-duration ease-in, transform @animate-duration ease-in;
-      padding: 50px;
+      padding: 4em;
       border-radius: 3px;
     };
 
