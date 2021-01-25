@@ -1,0 +1,113 @@
+@animate-duration: 0.35s;
+.editor {
+  max-width: 40rem;
+  
+  &-wrapper {
+    display: flex;
+    justify-content: center;
+    :focus {
+      outline: none;
+    }
+  }
+
+  &-content {
+    &-wrapper {
+      width: 100%;
+      will-change: transform;
+      transition: box-shadow @animate-duration ease-in, transform @animate-duration ease-in;
+      padding: 1.5em 3.5em;
+      border-radius: 3px;
+
+      &:hover {
+        box-shadow: 0px 10px 10px fade(#000, 8);
+      }
+    };
+
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    text-align: left;
+
+    pre {
+      padding: 0.7rem 1rem;
+      border-radius: 5px;
+      background: black;
+      color: white;
+      font-size: 0.8rem;
+      overflow-x: auto;
+
+      code {
+        display: block;
+      }
+    }
+
+    p code {
+      padding: 0.2rem 0.4rem;
+      border-radius: 5px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      background: rgba(black, 0.1);
+      color: rgba(black, 0.8);
+    }
+
+    ul,
+    ol {
+      padding-left: 1rem;
+    }
+
+    li > p,
+    li > ol,
+    li > ul {
+      margin: 0;
+    }
+
+    .resize-cursor {
+      cursor: ew-resize;
+      cursor: col-resize;
+    }
+  }
+}
+
+.menubar {
+
+    margin-bottom: 1rem;
+    transition: visibility 0.2s 0.4s, opacity 0.2s 0.4s;
+  
+    &.is-hidden {
+      visibility: hidden;
+      opacity: 0;
+    }
+  
+    &.is-focused {
+      visibility: visible;
+      opacity: 1;
+      transition: visibility 0.2s, opacity 0.2s;
+    }
+  
+    &-button {
+      font-weight: bold;
+      display: inline-flex;
+      align-items: center;
+      background: transparent;
+      border: 0;
+      color: black;
+      padding: 0.2rem 0.5rem;
+      margin-right: 0.2rem;
+      border-radius: 3px;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+  
+      &:hover {
+        background-color: rgba(black, 0.05);
+      }
+  
+      &.is-active {
+        background-color: rgba(black, 0.1);
+      }
+  
+      &-icon {
+        width: 2em;
+        height: 0.5em;
+      }
+    }
+  }

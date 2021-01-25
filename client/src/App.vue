@@ -1,15 +1,11 @@
 <template>
   <div id="app">
-    <!-- <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div> -->
-      <a-page-header
-        style="border: 1px solid rgb(235, 237, 240)"
-        title="Collaboration"
-        sub-title="By Tiptap"
-        class="header"
-      />
+    <a-page-header
+      style="border: 1px solid rgb(235, 237, 240)"
+      title="Collaboration"
+      sub-title="By Tiptap"
+      class="header"
+    />
     <router-view/>
   </div>
 </template>

@@ -35,47 +35,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-// .icon {
-//   position: relative;
-//   display: inline-block;
-//   vertical-align: middle;
-//   width: 0.8rem;
-//   height: 0.8rem;
-//   margin: 0 .3rem;
-//   top: -.05rem;
-//   fill: black;
-//   // &.has-align-fix {
-//   // 	top: -.1rem;
-//   // }
-//   &__svg {
-//     display: inline-block;
-
-//     width: 100%;
-//     height: 100%;
-//   }
-//   &:first-child {
-//     margin-left: 0;
-//   }
-//   &:last-child {
-//     margin-right: 0;
-//   }
-// }
-// // svg sprite
-// body > svg,
-// .icon use > svg,
-// symbol {
-//   path,
-//   rect,
-//   circle,
-//   g {
-//     fill: black;
-//     stroke: none;
-//   }
-//   *[d="M0 0h24v24H0z"] {
-//     display: none;
-//   }
-// }
-
 .icon {
     &-svg-container {
         width: 2em;
