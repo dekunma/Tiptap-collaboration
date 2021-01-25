@@ -45,12 +45,21 @@ app.get('/new', (req, res, next) => {
         type: 'doc',
         content: [
           {
-            type: "paragraph",
+            type: "heading",
             content: [
               {
                 "type": "text",
-                "text": "Welcome to collaboration documents!"
-              }
+                "text": "Welcome to collaboration documents! 👏"
+              },
+            ]
+          },
+          {
+            type: "heading",
+            content: [
+              {
+                "type": "text",
+                "text": "Start by typing or editing something"
+              },
             ]
           },
         ]
@@ -66,14 +75,6 @@ app.get('/new', (req, res, next) => {
     })
     .then(() => res.send(newCollaborationId))
     .catch(e => res.status(500).send(e))
-    // redis.smembers(key).then(r => {
-    //   console.log(r)
-    //   result = []
-    //   for (ii of r) {
-    //     result.push(JSON.parse(ii))
-    //   }
-    //   res.json(result)
-    // })
 })
 
 const masxStoredSteps = 1000;
@@ -96,7 +97,7 @@ async function setSteps(documentId, {steps, version}) {
     })
   ]
 
-  const result = await redis.hset(`steps.${documentId}`, 'data', JSON.stringify(newData));
+  await redis.hset(`steps.${documentId}`, 'data', JSON.stringify(newData));
   resolve()
 }
 
@@ -160,7 +161,6 @@ io.on('connection', async (socket) => {
   io.to(documentId).emit('init', data)
 
   socket.on('update', async ({ version, clientID, steps }) => {
-    console.log('update, documentId: ', documentId)
     // we need to check if there is another update processed
     // so we store a "locked" state
     const locked = await getLocked(documentId);
@@ -183,7 +183,6 @@ io.on('connection', async (socket) => {
       }
       // socket.emit('update', newData)
       io.to(documentId).emit('update', newData);
-      console.log('s,', newData)
       await setLocked(documentId, false);
       return;
     }
@@ -218,9 +217,6 @@ io.on('connection', async (socket) => {
 
     // send update to everyone (me and others)
     io.to(documentId).emit('update', dataToEmit)
-
-    console.log('d, ', dataToEmit)
-
     await setLocked(documentId, false)
   })
 

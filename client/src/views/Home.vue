@@ -2,7 +2,7 @@
   <div class="container">
     <a-tooltip placement="top">
         <template slot="title">
-          <span>Click to create a new collaboration document</span>
+          <span>Create a new collaboration document</span>
         </template>
         <a-button icon="plus" size="large" :loading='loading' class="home-button" @click='handleCreateNewDoc'>
           {{ this.buttonText }}
