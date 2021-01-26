@@ -202,7 +202,7 @@ export default {
 
 	mounted() {
     const documentId = this.$route.query.id;
-    this.socket = io(`${environmentConfig.SERVER_ADDRESS}:${environmentConfig.SERVER_PORT}`, { query: `id=${documentId}` })
+    this.socket = io(`${environmentConfig.SERVER_ADDRESS}`, { query: `id=${documentId}` })
 
 		// get the current document and its version
     .on('init', data => {

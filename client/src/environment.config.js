@@ -2,6 +2,5 @@
 // So that I handled configurations this way
 
 export default {
-    SERVER_ADDRESS: 'http://localhost:5000',
-    SERVER_PORT: 5000
+    SERVER_ADDRESS: 'https://api.dekun.me',
 }

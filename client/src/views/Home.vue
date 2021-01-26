@@ -32,7 +32,7 @@ export default {
     // create a new document
     handleCreateNewDoc() {
       this.loading = true
-      axios.get(`${environmentConfig.SERVER_ADDRESS}:${environmentConfig.SERVER_PORT}/new`)
+      axios.get(`${environmentConfig.SERVER_ADDRESS}/new`)
       .then(r => {
         window.location.href = `/document/?id=${r.data}`
       })
