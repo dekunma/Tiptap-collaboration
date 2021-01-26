@@ -4,19 +4,21 @@
 **Notice:** the server hosting this demo application is located in Los Angeles, so latency would be unexpectedly high if you are visiting it in China.
 
 ## Frameworks
-- vue.js
+- Vue.js
 - Express.js
 - Socket.io
 - Redis
 
 ## Usage
-1. Click "New document" to create a new collaborating document   
+1. Go to [collaboration.dekun.me](http://collaboration.dekun.me)
+
+2. Click "New document" to create a new collaborating document   
 ![new-collaboration.png](https://i.loli.net/2021/01/26/fYTLiUvhHQzmRVI.png)
 
 <br/>
 <bnr/>
 
-2. In the new document, try typing or editing something.  
+3. In the new document, try typing or editing something.  
     Other users in the same document can see the changes simultaneously.
     ![main.png](https://i.loli.net/2021/01/26/l1mACur5QpoORHy.png)
 
@@ -42,7 +44,7 @@ Make sure you have these installed before moving on to the next steps.
     ```
     to start redis in the background.
     ![redis.png](https://i.loli.net/2021/01/26/GTpjQfu8W1rn7UV.png)
-    By default, Redis will start on port ```6379``` without no username or password required.
+    By default, Redis will start on port ```6379``` with no username or password required.
 
 5. Back to the ```server``` directory.  
     If you did not start redis on your local machine or changed the port of redis, go to ```server/.env```   
@@ -78,7 +80,7 @@ Make sure you have these installed before moving on to the next steps.
 
 3. After installing the dependencies, do
     ``` 
-    yarn server
+    yarn serve
     ```
     to start the application.
 4. the application will start on ```http://localhost:8080``` by default
